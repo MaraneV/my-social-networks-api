@@ -1,0 +1,86 @@
+MY SOCIAL NETWORKS - DOCUMENTATION API
+ 
+URL : http://localhost:3000
+Les routes avec [auth] demandent le header : Authorization: Bearer <token>
+Le token est renvoyé par /auth/register et /auth/login.
+ 
+ 
+AUTH
+----
+POST /auth/register        créer un compte (firstName, lastName, email, password)
+POST /auth/login           se connecter (email, password)
+ 
+ 
+USERS [auth]
+------------
+GET  /users/me             mon profil
+PUT  /users/me             modifier mon profil
+GET  /users                liste des utilisateurs
+GET  /users/:id            un utilisateur
+ 
+ 
+GROUPES [auth]
+--------------
+POST   /groups                     créer un groupe (le créateur devient admin)
+GET    /groups                     liste des groupes
+GET    /groups/:id                 détail d'un groupe
+PUT    /groups/:id                 modifier (admin)
+DELETE /groups/:id                 supprimer (admin)
+POST   /groups/:id/join            rejoindre un groupe public
+POST   /groups/:id/members         ajouter un membre (admin)
+DELETE /groups/:id/members/:userId retirer un membre (admin)
+POST   /groups/:id/admins          ajouter un admin (admin)
+GET    /groups/:id/thread          fil de discussion du groupe
+ 
+Type de groupe : public, private ou secret
+ 
+ 
+EVENEMENTS [auth]
+-----------------
+POST   /events                     créer un événement (le créateur devient organisateur)
+GET    /events                     liste des événements
+GET    /events/:id                 détail d'un événement
+PUT    /events/:id                 modifier (organisateur)
+DELETE /events/:id                 supprimer (organisateur)
+POST   /events/:id/join            participer à un événement public
+POST   /events/:id/participants    inviter quelqu'un (organisateur)
+POST   /events/:id/organizers      ajouter un organisateur (organisateur)
+GET    /events/:id/thread          fil de discussion de l'événement
+ 
+Visibilité d'un événement : visibility = public ou private
+Pour créer un événement dans un groupe : groupId
+Pour inviter tous les membres du groupe : inviteAllMembers: true
+ 
+ 
+DISCUSSIONS [auth]
+------------------
+GET  /threads/:id/messages         lire les messages
+POST /threads/:id/messages         envoyer un message (replyTo pour répondre)
+ 
+ 
+ALBUMS PHOTO [auth]
+-------------------
+POST /events/:id/album             créer l'album (un seul album par événement)
+GET  /events/:id/album             album d'un événement
+POST /albums/:id/photos            ajouter une photo
+GET  /albums/:id/photos            photos d'un album
+POST /photos/:id/comments          commenter une photo
+GET  /photos/:id/comments          commentaires d'une photo
+ 
+ 
+SONDAGES [auth]
+---------------
+POST /events/:id/polls             créer un sondage (organisateur)
+GET  /events/:id/polls             sondages d'un événement
+POST /polls/:id/answers            répondre au sondage
+GET  /polls/:id/results            résultats
+ 
+ 
+BILLETTERIE
+-----------
+POST /events/:id/ticket-types      créer un type de billet (organisateur) [auth]
+GET  /events/:id/ticket-types      voir les billets disponibles
+POST /events/:id/tickets           acheter un billet (pas besoin de compte)
+GET  /events/:id/tickets           billets vendus (organisateur) [auth]
+ 
+Un seul billet par personne (email) et par événement.
